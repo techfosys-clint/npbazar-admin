@@ -13,6 +13,9 @@ import {
   FiStar,
   FiMessageSquare,
   FiTrendingUp,
+  FiUserPlus,
+  FiRepeat,
+  FiCreditCard,
 } from 'react-icons/fi';
 import {
   AreaChart,
@@ -41,12 +44,15 @@ interface Stats {
   lowStock: number;
   outOfStock: number;
   totalCustomers: number;
+  newCustomersToday: number;
   pendingReviews: number;
   totalRevenue: number;
   todayRevenue: number;
   totalProfit: number;
   activeCarts: number;
   cartItems: number;
+  avgOrderValue: number;
+  returningCustomerRate: number;
 }
 
 interface SalesPoint {
@@ -129,6 +135,13 @@ export default function DashboardPage() {
           color: 'text-primary bg-primary/10',
         },
         {
+          label: 'Avg Order Value',
+          value: `৳${stats.avgOrderValue.toLocaleString()}`,
+          sub: 'per completed order',
+          icon: FiCreditCard,
+          color: 'text-cyan-600 bg-cyan-50',
+        },
+        {
           label: 'Active Carts',
           value: stats.activeCarts.toLocaleString(),
           sub: `${stats.cartItems} products waiting`,
@@ -141,6 +154,20 @@ export default function DashboardPage() {
           sub: 'registered accounts',
           icon: FiUsers,
           color: 'text-indigo-600 bg-indigo-50',
+        },
+        {
+          label: 'New Customers',
+          value: stats.newCustomersToday.toLocaleString(),
+          sub: 'registered today',
+          icon: FiUserPlus,
+          color: 'text-teal-600 bg-teal-50',
+        },
+        {
+          label: 'Returning Rate',
+          value: `${stats.returningCustomerRate}%`,
+          sub: 'customers with 2+ orders',
+          icon: FiRepeat,
+          color: 'text-violet-600 bg-violet-50',
         },
         {
           label: 'Products',
