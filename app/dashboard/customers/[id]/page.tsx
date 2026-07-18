@@ -73,7 +73,6 @@ export default function CustomerDetailPage() {
             <div>
               <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
                 {customer.name}
-                <StatusBadge status={customer.isPhoneVerified ? 'verified' : 'unverified'} />
               </h1>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
                 {customer.mobile} {customer.email && `· ${customer.email}`} · joined{' '}

@@ -41,7 +41,6 @@ interface Stats {
   lowStock: number;
   outOfStock: number;
   totalCustomers: number;
-  verifiedCustomers: number;
   pendingReviews: number;
   totalRevenue: number;
   todayRevenue: number;
@@ -139,7 +138,7 @@ export default function DashboardPage() {
         {
           label: 'Customers',
           value: stats.totalCustomers.toLocaleString(),
-          sub: `${stats.verifiedCustomers} phone-verified`,
+          sub: 'registered accounts',
           icon: FiUsers,
           color: 'text-indigo-600 bg-indigo-50',
         },

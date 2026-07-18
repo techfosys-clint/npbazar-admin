@@ -7,7 +7,6 @@ import api, { API_BASE } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { toastError, toastSuccess, confirmDialog } from '@/lib/toast';
 import Pagination from '@/components/Pagination';
-import StatusBadge from '@/components/StatusBadge';
 import { useDebouncedValue } from '@/lib/useDebouncedValue';
 import type { Customer, PaginationInfo } from '@/lib/types';
 
@@ -112,7 +111,6 @@ export default function CustomersPage() {
                 <th className="px-6 py-3 font-medium">Customer</th>
                 <th className="px-6 py-3 font-medium">Mobile</th>
                 <th className="px-6 py-3 font-medium">Email</th>
-                <th className="px-6 py-3 font-medium">Phone Verified</th>
                 <th className="px-6 py-3 font-medium">Joined</th>
                 <th className="px-6 py-3 text-right font-medium">Actions</th>
               </tr>
@@ -120,13 +118,13 @@ export default function CustomersPage() {
             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={5} className="px-6 py-12 text-center">
                     <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-primary dark:border-zinc-800 dark:border-t-zinc-50"></div>
                   </td>
                 </tr>
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-zinc-500 dark:text-zinc-400">
+                  <td colSpan={5} className="px-6 py-12 text-center text-zinc-500 dark:text-zinc-400">
                     No customers found.
                   </td>
                 </tr>
@@ -143,9 +141,6 @@ export default function CustomersPage() {
                     </td>
                     <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">{c.mobile}</td>
                     <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">{c.email || '—'}</td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={c.isPhoneVerified ? 'verified' : 'unverified'} />
-                    </td>
                     <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400">
                       {new Date(c.createdAt).toLocaleDateString()}
                     </td>

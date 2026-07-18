@@ -213,7 +213,6 @@ export interface Customer {
   name: string;
   mobile: string;
   email?: string;
-  isPhoneVerified: boolean;
   createdAt: string;
 }
 
