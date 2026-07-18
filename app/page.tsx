@@ -182,7 +182,7 @@ export default function AdminAuthPage() {
                   Password
                 </label>
                 {hasSuperAdmin && (
-                  <a href="#" className="text-xs font-medium text-blue-600 hover:underline dark:text-blue-400">
+                  <a href="/forgot-password" className="text-xs font-medium text-blue-600 hover:underline dark:text-blue-400">
                     Forgot password?
                   </a>
                 )}
