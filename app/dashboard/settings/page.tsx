@@ -92,6 +92,12 @@ export default function SettingsPage() {
               max={1}
               label="Store Logo"
             />
+            <ImageUploader
+              value={settings.favicon ? [settings.favicon] : []}
+              onChange={(urls) => set('favicon', urls[0] || '')}
+              max={1}
+              label="Favicon (used on both storefront and admin panel)"
+            />
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className={labelCls}>Contact Email</label>

@@ -279,6 +279,7 @@ export interface AdminUser {
 export interface StoreSettings {
   storeName: string;
   logo?: string;
+  favicon?: string;
   email?: string;
   phone?: string;
   address?: string;
