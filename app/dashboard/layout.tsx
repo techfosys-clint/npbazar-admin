@@ -316,7 +316,10 @@ export default function DashboardLayout({
           </button>
 
           <div className="flex flex-1 justify-end px-4">
-            <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/profile"
+              className="flex items-center gap-3 rounded-lg px-2 py-1 transition hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            >
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-white dark:bg-white dark:text-zinc-900">
                 {admin?.fullName?.charAt(0).toUpperCase() || 'A'}
               </div>
@@ -328,7 +331,7 @@ export default function DashboardLayout({
                   {admin?.role?.replace('_', ' ') || ''}
                 </p>
               </div>
-            </div>
+            </Link>
           </div>
         </header>
 
