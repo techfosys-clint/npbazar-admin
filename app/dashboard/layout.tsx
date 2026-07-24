@@ -29,6 +29,7 @@ import {
   FiTruck,
   FiCreditCard,
   FiSearch,
+  FiFile,
 } from 'react-icons/fi';
 import { RiAdminLine, RiShoppingBasketLine } from 'react-icons/ri';
 import Swal from 'sweetalert2';
@@ -64,6 +65,7 @@ const MENU_ITEMS = [
     subItems: [
       { name: 'Banners / Hero', path: '/dashboard/banners', icon: FiLayout, perm: 'banners' },
       { name: 'Blog Posts', path: '/dashboard/blogs', icon: FiFileText, perm: 'blogs' },
+      { name: 'Static Pages', path: '/dashboard/pages', icon: FiFile, perm: 'settings' },
       { name: 'FAQs', path: '/dashboard/faqs', icon: FiHelpCircle, perm: 'faqs' },
       { name: 'Media Library', path: '/dashboard/media', icon: FiImage, perm: 'media' },
     ],

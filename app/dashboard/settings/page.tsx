@@ -283,46 +283,10 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className={cardCls}>
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">Pages Content (HTML Supported)</h2>
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div>
-            <label className={labelCls}>About Us</label>
-            <textarea
-              value={settings.aboutUs || ''}
-              onChange={(e) => set('aboutUs', e.target.value)}
-              className={`${inputCls} min-h-32`}
-              placeholder="Content for the About Us page..."
-            />
-          </div>
-          <div>
-            <label className={labelCls}>Contact Us</label>
-            <textarea
-              value={settings.contactUs || ''}
-              onChange={(e) => set('contactUs', e.target.value)}
-              className={`${inputCls} min-h-32`}
-              placeholder="Content for the Contact Us page..."
-            />
-          </div>
-          <div>
-            <label className={labelCls}>Privacy Policy</label>
-            <textarea
-              value={settings.privacyPolicy || ''}
-              onChange={(e) => set('privacyPolicy', e.target.value)}
-              className={`${inputCls} min-h-48`}
-              placeholder="Content for the Privacy Policy page..."
-            />
-          </div>
-          <div>
-            <label className={labelCls}>Refund Policy</label>
-            <textarea
-              value={settings.refundPolicy || ''}
-              onChange={(e) => set('refundPolicy', e.target.value)}
-              className={`${inputCls} min-h-48`}
-              placeholder="Content for the Refund Policy page..."
-            />
-          </div>
-        </div>
+      <div className="rounded-xl border border-dashed border-zinc-200 p-4 text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+        Looking to edit the About Us, Contact Us, Privacy Policy or Refund Policy page content? That&apos;s now under{' '}
+        <Link href="/dashboard/pages" className="font-medium text-primary hover:underline">Static Pages</Link>, with a
+        full design editor instead of plain text.
       </div>
     </form>
   );
