@@ -15,9 +15,39 @@ interface Props {
   label?: string;
   /** Compact single-row style for small forms. */
   compact?: boolean;
+  /** Reject files larger than this (KB), checked client-side before upload — e.g. for favicons. */
+  maxSizeKB?: number;
+  /** Reject images wider/taller than this (px), checked client-side before upload. */
+  maxDimension?: number;
 }
 
-export default function ImageUploader({ value, onChange, max = 3, label, compact }: Props) {
+/** Resolves an error message if the file breaks maxSizeKB/maxDimension, else null. */
+function validateFile(file: File, maxSizeKB?: number, maxDimension?: number): Promise<string | null> {
+  if (maxSizeKB && file.size > maxSizeKB * 1024) {
+    return Promise.resolve(`"${file.name}" is ${Math.round(file.size / 1024)}KB — max allowed is ${maxSizeKB}KB`);
+  }
+  if (!maxDimension) return Promise.resolve(null);
+
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      if (img.width > maxDimension || img.height > maxDimension) {
+        resolve(`"${file.name}" is ${img.width}×${img.height}px — max allowed is ${maxDimension}×${maxDimension}px`);
+      } else {
+        resolve(null);
+      }
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(null);
+    };
+    img.src = url;
+  });
+}
+
+export default function ImageUploader({ value, onChange, max = 3, label, compact, maxSizeKB, maxDimension }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -31,6 +61,17 @@ export default function ImageUploader({ value, onChange, max = 3, label, compact
       return;
     }
     const selected = Array.from(files).slice(0, remaining);
+
+    if (maxSizeKB || maxDimension) {
+      for (const file of selected) {
+        const error = await validateFile(file, maxSizeKB, maxDimension);
+        if (error) {
+          toastError(error);
+          return;
+        }
+      }
+    }
+
     setUploading(true);
     try {
       const urls = await uploadImages(selected);
@@ -115,7 +156,8 @@ export default function ImageUploader({ value, onChange, max = 3, label, compact
       </div>
       {!compact && (
         <p className="mt-1.5 text-xs text-zinc-400">
-          {value.length}/{max} images · JPG, PNG, WEBP · max 5MB each
+          {value.length}/{max} images · JPG, PNG, WEBP · max {maxSizeKB ? `${maxSizeKB}KB` : '5MB'} each
+          {maxDimension ? ` · max ${maxDimension}×${maxDimension}px` : ''}
         </p>
       )}
 
