@@ -97,8 +97,10 @@ export default function SettingsPage() {
               onChange={(urls) => set('favicon', urls[0] || '')}
               max={1}
               maxSizeKB={200}
-              maxDimension={512}
-              label="Favicon (used on both storefront and admin panel) — small square icon, not your full logo"
+              accept=".ico,image/x-icon,image/vnd.microsoft.icon"
+              allowedExtensions={['ico']}
+              hideLibrary
+              label="Favicon (used on both storefront and admin panel) — .ico file only, not a regular photo/logo image"
             />
             <div className="grid gap-4 sm:grid-cols-2">
               <div>

@@ -19,10 +19,27 @@ interface Props {
   maxSizeKB?: number;
   /** Reject images wider/taller than this (px), checked client-side before upload. */
   maxDimension?: number;
+  /** Restricts the file picker + client-side validation to these extensions (e.g. ['ico']). Defaults to standard image types. */
+  allowedExtensions?: string[];
+  /** Overrides the file input's `accept` attribute. Defaults to standard image mimetypes. */
+  accept?: string;
+  /** Hides the "pick from media library" button — the library only holds regular images, so hide it for restricted types like favicons. */
+  hideLibrary?: boolean;
 }
 
-/** Resolves an error message if the file breaks maxSizeKB/maxDimension, else null. */
-function validateFile(file: File, maxSizeKB?: number, maxDimension?: number): Promise<string | null> {
+/** Resolves an error message if the file breaks the extension/size/dimension limits, else null. */
+function validateFile(
+  file: File,
+  maxSizeKB?: number,
+  maxDimension?: number,
+  allowedExtensions?: string[]
+): Promise<string | null> {
+  if (allowedExtensions?.length) {
+    const ext = file.name.split('.').pop()?.toLowerCase() || '';
+    if (!allowedExtensions.includes(ext)) {
+      return Promise.resolve(`"${file.name}" must be a .${allowedExtensions.join('/.')} file`);
+    }
+  }
   if (maxSizeKB && file.size > maxSizeKB * 1024) {
     return Promise.resolve(`"${file.name}" is ${Math.round(file.size / 1024)}KB — max allowed is ${maxSizeKB}KB`);
   }
@@ -47,7 +64,18 @@ function validateFile(file: File, maxSizeKB?: number, maxDimension?: number): Pr
   });
 }
 
-export default function ImageUploader({ value, onChange, max = 3, label, compact, maxSizeKB, maxDimension }: Props) {
+export default function ImageUploader({
+  value,
+  onChange,
+  max = 3,
+  label,
+  compact,
+  maxSizeKB,
+  maxDimension,
+  allowedExtensions,
+  accept,
+  hideLibrary,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -62,9 +90,9 @@ export default function ImageUploader({ value, onChange, max = 3, label, compact
     }
     const selected = Array.from(files).slice(0, remaining);
 
-    if (maxSizeKB || maxDimension) {
+    if (maxSizeKB || maxDimension || allowedExtensions?.length) {
       for (const file of selected) {
-        const error = await validateFile(file, maxSizeKB, maxDimension);
+        const error = await validateFile(file, maxSizeKB, maxDimension, allowedExtensions);
         if (error) {
           toastError(error);
           return;
@@ -142,7 +170,7 @@ export default function ImageUploader({ value, onChange, max = 3, label, compact
         )}
 
         {/* Pick from media library */}
-        {value.length < max && (
+        {!hideLibrary && value.length < max && (
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
@@ -156,24 +184,27 @@ export default function ImageUploader({ value, onChange, max = 3, label, compact
       </div>
       {!compact && (
         <p className="mt-1.5 text-xs text-zinc-400">
-          {value.length}/{max} images · JPG, PNG, WEBP · max {maxSizeKB ? `${maxSizeKB}KB` : '5MB'} each
+          {value.length}/{max} {allowedExtensions?.length ? allowedExtensions.join('/').toUpperCase() : 'images · JPG, PNG, WEBP'} · max{' '}
+          {maxSizeKB ? `${maxSizeKB}KB` : '5MB'} each
           {maxDimension ? ` · max ${maxDimension}×${maxDimension}px` : ''}
         </p>
       )}
 
-      <MediaPicker
-        open={pickerOpen}
-        onClose={() => setPickerOpen(false)}
-        max={remaining > 0 ? remaining : 1}
-        onSelect={(urls) => {
-          const merged = [...value, ...urls.filter((u) => !value.includes(u))].slice(0, max);
-          onChange(merged);
-        }}
-      />
+      {!hideLibrary && (
+        <MediaPicker
+          open={pickerOpen}
+          onClose={() => setPickerOpen(false)}
+          max={remaining > 0 ? remaining : 1}
+          onSelect={(urls) => {
+            const merged = [...value, ...urls.filter((u) => !value.includes(u))].slice(0, max);
+            onChange(merged);
+          }}
+        />
+      )}
       <input
         ref={inputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+        accept={accept || 'image/jpeg,image/png,image/webp,image/gif,image/avif'}
         multiple={max > 1}
         hidden
         onChange={(e) => {
