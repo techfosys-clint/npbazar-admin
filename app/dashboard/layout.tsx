@@ -28,6 +28,7 @@ import {
   FiChevronRight,
   FiTruck,
   FiCreditCard,
+  FiSearch,
 } from 'react-icons/fi';
 import { RiAdminLine, RiShoppingBasketLine } from 'react-icons/ri';
 import Swal from 'sweetalert2';
@@ -83,6 +84,7 @@ const MENU_ITEMS = [
       { name: 'Shipping Zones', path: '/dashboard/shipping', icon: FiMapPin, perm: 'shipping' },
       { name: 'Courier Integration', path: '/dashboard/courier', icon: FiTruck, perm: 'courier' },
       { name: 'Payment Gateways', path: '/dashboard/payments', icon: FiCreditCard, perm: 'payments' },
+      { name: 'SEO & Meta', path: '/dashboard/seo', icon: FiSearch, perm: 'settings' },
       { name: 'Settings', path: '/dashboard/settings', icon: FiSettings, perm: 'settings' },
     ],
   },

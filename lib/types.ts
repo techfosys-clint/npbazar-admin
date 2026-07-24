@@ -305,7 +305,25 @@ export interface StoreSettings {
   contactUs?: string;
   privacyPolicy?: string;
   refundPolicy?: string;
+  /** Site-wide SEO/social-share defaults, plus per-static-page overrides. */
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    /** Social share (Open Graph/Twitter) image — falls back to `logo` when empty. */
+    ogImage?: string;
+    pages?: Partial<Record<SeoPageKey, { title?: string; description?: string }>>;
+  };
 }
+
+export type SeoPageKey = 'home' | 'about' | 'contact' | 'privacyPolicy' | 'refundPolicy';
+
+export const SEO_PAGE_LABELS: { key: SeoPageKey; label: string }[] = [
+  { key: 'home', label: 'Home Page' },
+  { key: 'about', label: 'About Us' },
+  { key: 'contact', label: 'Contact Us' },
+  { key: 'privacyPolicy', label: 'Privacy Policy' },
+  { key: 'refundPolicy', label: 'Refund Policy' },
+];
 
 export interface PaginationInfo {
   page: number;
